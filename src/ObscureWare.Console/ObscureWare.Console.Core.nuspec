@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>ObscureWare.Console.Core</id>
+    <version>$version$</version>
+    <title>ObscureWare.Console.Core</title>
+    <authors>Sebastian Gruchacz</authors>
+    <owners>ObscureWare Solutions</owners>
+    <licenseUrl>https://github.com/ObscureWare/Console.Core/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/ObscureWare/Console.Core/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This small library allows more control on System.Console than using default one. Plus CloseColorFinder tool for mapping System.Drawing.Color structure to the closest possible color from console's 16 colors. And you can also easily edit those defaults.</description>
+    <releaseNotes>Version BETA. Will be extended with more functionality.</releaseNotes>
+    <copyright>Copyright © Sebastian Gruchacz 2016</copyright>
+    <tags>Console,Colors,Management</tags>
+  </metadata>
+  <files>
+    
+  </files>
+</package>
