@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CloseColorFinder.cs" />
-    <Compile Include="ConsoleManager.cs" />
+    <Compile Include="ConsoleController.cs" />
     <Compile Include="ConsoleFontColor.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IConsole.cs" />

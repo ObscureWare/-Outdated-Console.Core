@@ -34,7 +34,7 @@ namespace ObscureWare.Console
     using System.Runtime.InteropServices;
     using System.Security;
 
-    internal class NativeMethods
+    internal static class NativeMethods
     {
         // ReSharper disable InconsistentNaming (PInvoke structures named accordingly to win.h definitions...)
 

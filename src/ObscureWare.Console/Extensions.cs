@@ -23,13 +23,18 @@
 // SOFTWARE.
 // </copyright>
 // <summary>
-//   DHelper extensions.
+//   Helper extensions.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace ObscureWare.Console
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Prints <see cref="System.Drawing.Color"/> as RGB hex string.
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public static string ToRgbHex(this System.Drawing.Color c)
         {
             return "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");

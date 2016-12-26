@@ -37,7 +37,7 @@ namespace ObscureWare.Console
     /// <summary>
     /// Class responsible for finding closest color index from given console colors array.
     /// </summary>
-    public class CloseColorFinder
+    public class CloseColorFinder : IDisposable
     {
         private const float COLOR_WEIGHT_HUE = 47.5f;
 
@@ -117,6 +117,52 @@ namespace ObscureWare.Console
                 (Math.Abs(sc - dc) / COLOR_WEIGHT_BLUE * COLOR_PROPORTION));
 
             return result;
+        }
+
+        public static CloseColorFinder GetDefault()
+        {
+            return new CloseColorFinder(GetDefaultDefinitions().ToArray());
+        }
+
+        public static CloseColorFinder CustomizedDefault(params Tuple<ConsoleColor, Color>[] overwrites)
+        {
+            var dict = GetDefaultDefinitions().ToDictionary(p => p.Key, p => p.Value);
+            foreach (var overwrite in overwrites)
+            {
+                dict[overwrite.Item1] = overwrite.Item2;
+            }
+
+            return new CloseColorFinder(dict.ToArray());
+        }
+
+        /// <summary>
+        /// Returns default color-set
+        /// </summary>
+        /// <returns></returns>
+        private static IEnumerable<KeyValuePair<ConsoleColor, Color>> GetDefaultDefinitions()
+        {
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Black, Color.FromArgb(0, 0, 0));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkBlue, Color.FromArgb(0, 0, 128));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkGreen, Color.FromArgb(0, 128, 0));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkCyan, Color.FromArgb(0, 128, 128));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkRed, Color.FromArgb(128, 0, 0));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkMagenta, Color.FromArgb(128, 0, 128));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkYellow, Color.FromArgb(128, 128, 0));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Gray, Color.FromArgb(192, 192, 192));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkGray, Color.FromArgb(128, 128, 128));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Blue, Color.FromArgb(0, 0, 255));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Green, Color.FromArgb(0, 255, 0));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Cyan, Color.FromArgb(0, 255, 255));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Red, Color.FromArgb(255, 0, 0));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Magenta, Color.FromArgb(255, 0, 255));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Yellow, Color.FromArgb(255, 255, 0));
+            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.White, Color.FromArgb(255, 255, 255));
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            // TODO: just do invalidation when disposed...
         }
     }
 }

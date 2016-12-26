@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ConsoleManager.cs" company="Obscureware Solutions">
+// <copyright file="ConsoleController.cs" company="Obscureware Solutions">
 // MIT License
 //
 // Copyright(c) 2015-2016 Sebastian Gruchacz
@@ -34,9 +34,9 @@ namespace ObscureWare.Console
     using System.Runtime.InteropServices;
 
     /// <summary>
-    /// Class used to manage system's Console colors
+    /// Class used to control basic system's console behavior
     /// </summary>
-    public class ConsoleManager : IDisposable
+    public class ConsoleController : IDisposable
     {
         private readonly IntPtr _hConsoleOutput;
 
@@ -45,7 +45,7 @@ namespace ObscureWare.Console
         /// <summary>
         /// Initializes new instance of ConsoleColorsHelper class
         /// </summary>
-        public ConsoleManager()
+        public ConsoleController()
         {
             // TODO: second instance created is crashing. Find out why and how to fix it / prevent. In the worst case - hidden control instance singleton
             this._hConsoleOutput = NativeMethods.GetStdHandle(NativeMethods.STD_OUTPUT_HANDLE); // 7
@@ -67,9 +67,9 @@ namespace ObscureWare.Console
         }
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="ConsoleManager"/> class. 
+        /// Finalizes an instance of the <see cref="ConsoleController"/> class. 
         /// </summary>
-        ~ConsoleManager()
+        ~ConsoleController()
         {
             // NOTE: Leave out the finalizer altogether if this class doesn't 
             // own unmanaged resources itself, but leave the other methods

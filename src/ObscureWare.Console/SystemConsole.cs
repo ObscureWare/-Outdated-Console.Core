@@ -23,7 +23,7 @@
 // SOFTWARE.
 // </copyright>
 // <summary>
-//   Defines the core SystemConsole wrapper on SystemConsole that implements IConsoleCommand interface.
+//   Defines the core SystemConsole wrapper on SystemConsole that implements IConsole interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace ObscureWare.Console
@@ -38,21 +38,21 @@ namespace ObscureWare.Console
     /// </summary>
     public class SystemConsole : IConsole
     {
-        private readonly ConsoleManager _helper;
+        private readonly ConsoleController _controller;
 
         /// <summary>
         /// In characters...
         /// </summary>
         public Point WindowSize { get; }
 
-        public SystemConsole(ConsoleManager manager, bool isFullScreen)
+        public SystemConsole(ConsoleController controller, bool isFullScreen)
         {
-            if (manager == null)
+            if (controller == null)
             {
-                throw new ArgumentNullException(nameof(manager));
+                throw new ArgumentNullException(nameof(controller));
             }
 
-            this._helper = manager;
+            this._controller = controller;
 
             Console.OutputEncoding = Encoding.Unicode;
             Console.InputEncoding = Encoding.Unicode;
@@ -80,6 +80,8 @@ namespace ObscureWare.Console
                 // TODO: use more constructors / methods to control window / buffer / size / position. Perhaps expose dedicated control interface?
                 Console.BufferWidth = 120;
                 Console.BufferHeight = 500;
+                Console.WindowWidth = 120;
+                Console.WindowHeight = 500;
             }
 
             this.WindowWidth = Console.WindowWidth;
@@ -95,6 +97,8 @@ namespace ObscureWare.Console
                 Screen.PrimaryScreen.WorkingArea.Width - (2 * 16),
                 Screen.PrimaryScreen.WorkingArea.Height - (2 * 16) - SystemInformation.CaptionHeight);
         }
+
+        // TODO: introduce atomic operations for asynchronous writes...
 
         public void WriteText(int x, int y, string text, Color foreColor, Color bgColor)
         {
@@ -126,8 +130,8 @@ namespace ObscureWare.Console
 
         public void SetColors(Color foreColor, Color bgColor)
         {
-            Console.ForegroundColor = this._helper.CloseColorFinder.FindClosestColor(foreColor);
-            Console.BackgroundColor = this._helper.CloseColorFinder.FindClosestColor(bgColor);
+            Console.ForegroundColor = this._controller.CloseColorFinder.FindClosestColor(foreColor);
+            Console.BackgroundColor = this._controller.CloseColorFinder.FindClosestColor(bgColor);
         }
 
         public void Clear()
@@ -177,7 +181,7 @@ namespace ObscureWare.Console
 
         public void ReplaceConsoleColor(ConsoleColor color, Color rgbColor)
         {
-            this._helper.ReplaceConsoleColor(color, rgbColor);
+            this._controller.ReplaceConsoleColor(color, rgbColor);
         }
 
         /// <summary>

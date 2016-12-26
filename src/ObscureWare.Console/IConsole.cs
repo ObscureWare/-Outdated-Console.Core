@@ -99,7 +99,7 @@ namespace ObscureWare.Console
 
         // TODO: read operations
 
-        // TODO: async rerad-write operations?
+        // TODO: asynchronous read-write operations? Probably not, but asynchronous writes -  for sure... Maybe move to operations?
 
         /// <summary>
         /// Gets vertical size of console Window
@@ -116,6 +116,7 @@ namespace ObscureWare.Console
         /// </summary>
         /// <returns></returns>
         string ReadLine();
+
         void WriteLine();
 
         void SetColors(ConsoleFontColor style);
