@@ -38,20 +38,28 @@
             }
         }
 
-        // TODO: find exact colors for demo purposes
-        //[Fact]
-        //public void PrintCustomizedColorsByDnv()
-        //{
-        //    string fName = "custom_setup_dnv.html";
-        //    using (var colorHelper = CloseColorFinder.CustomizedDefault(
-        //            new Tuple<ConsoleColor, Color>(ConsoleColor.DarkCyan, Color.Chocolate),
-        //            new Tuple<ConsoleColor, Color>(ConsoleColor.Blue, Color.DodgerBlue),
-        //            new Tuple<ConsoleColor, Color>(ConsoleColor.Yellow, Color.Gold),
-        //            new Tuple<ConsoleColor, Color>(ConsoleColor.DarkBlue, Color.MidnightBlue)))
-        //    {
-        //        PrintAllNamedColorsToHTML(colorHelper, fName);
-        //    }
-        //}
+        [Fact]
+        public void PrintCustomizedColorsByDnv()
+        {
+            var converter = new ColorConverter();
+
+            string fName = "custom_setup_dnv.html";
+            using (
+                var colorHelper = CloseColorFinder.CustomizedDefault(
+                    new Tuple<ConsoleColor, Color>(ConsoleColor.Cyan, (Color)converter.ConvertFromString("#99d9f0")),
+                    new Tuple<ConsoleColor, Color>(ConsoleColor.DarkCyan, (Color)converter.ConvertFromString("#e98300")),
+                    new Tuple<ConsoleColor, Color>(ConsoleColor.Blue, (Color)converter.ConvertFromString("#009fda")),
+                    new Tuple<ConsoleColor, Color>(ConsoleColor.Yellow, (Color)converter.ConvertFromString("#fecb00")),
+                    new Tuple<ConsoleColor, Color>(ConsoleColor.DarkGreen, (Color)converter.ConvertFromString("#36842d")),
+                    new Tuple<ConsoleColor, Color>(ConsoleColor.Blue, (Color)converter.ConvertFromString("#003591")),
+                    new Tuple<ConsoleColor, Color>(ConsoleColor.Magenta, (Color)converter.ConvertFromString("#635091")),
+                    new Tuple<ConsoleColor, Color>(ConsoleColor.DarkRed, (Color)converter.ConvertFromString("#c4262e")),
+                    new Tuple<ConsoleColor, Color>(ConsoleColor.DarkBlue, (Color)converter.ConvertFromString("#0f204b")),
+                    new Tuple<ConsoleColor, Color>(ConsoleColor.DarkGray, (Color)converter.ConvertFromString("#988f86"))))
+            {
+                PrintAllNamedColorsToHtml(colorHelper, fName);
+            }
+        }
 
         private static void PrintAllNamedColorsToHtml(CloseColorFinder helper, string fName)
         {
