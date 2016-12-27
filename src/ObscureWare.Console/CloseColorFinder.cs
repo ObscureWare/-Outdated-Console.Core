@@ -39,28 +39,16 @@ namespace ObscureWare.Console
     /// </summary>
     public class CloseColorFinder : IDisposable
     {
-        private const float COLOR_WEIGHT_HUE = 47.5f;
-
-        private const float COLOR_WEIGHT_SATURATION = 28.75f;
-
-        private const float COLOR_WEIGHT_BRIGHTNESS = 23.75f;
-
-        private const float COLOR_WEIGHT_RED = 28.5f;
-
-        private const float COLOR_WEIGHT_GREEN = 28.5f;
-
-        private const float COLOR_WEIGHT_BLUE = 23.75f;
-
-        // final weight - how color weights over (under?) "luminosity"
-        private const float COLOR_PROPORTION = 0.5f; //100f / 255f;
-
         private readonly ConcurrentDictionary<Color, ConsoleColor> _knownMappings = new ConcurrentDictionary<Color, ConsoleColor>();
 
         private readonly KeyValuePair<ConsoleColor, Color>[] _colorBuffer;
 
-        public CloseColorFinder(KeyValuePair<ConsoleColor, Color>[] colorBuffer)
+        private readonly ColorBalancer _colorBalancer;
+
+        public CloseColorFinder(KeyValuePair<ConsoleColor, Color>[] colorBuffer, ColorBalancer colorBalancer = null)
         {
             this._colorBuffer = colorBuffer;
+            this._colorBalancer = colorBalancer ?? ColorBalancer.Default;
         }
 
         /// <summary>
@@ -77,7 +65,7 @@ namespace ObscureWare.Console
                 return cc;
             }
 
-            cc = this._colorBuffer.OrderBy(kp => this.ColorMatching(color, kp.Value)).First().Key;
+            cc = this._colorBuffer.OrderBy(kp => this._colorBalancer.ColorMatching(color, kp.Value)).First().Key;
             this._knownMappings.TryAdd(color, cc);
             return cc;
         }
@@ -90,33 +78,6 @@ namespace ObscureWare.Console
         public Color GetCurrentConsoleColor(ConsoleColor cc)
         {
             return this._colorBuffer.Single(pair => pair.Key == cc).Value;
-        }
-
-        private float ColorMatching(Color srcColor, Color destColor)
-        {
-            var sh = srcColor.GetHue();
-            var ss = srcColor.GetSaturation();
-            var sb = srcColor.GetBrightness();
-            var dh = destColor.GetHue();
-            var ds = destColor.GetSaturation();
-            var db = destColor.GetBrightness();
-
-            var sr = srcColor.R;
-            var sg = srcColor.G;
-            var sc = srcColor.B;
-            var dr = destColor.R;
-            var dg = destColor.G;
-            var dc = destColor.B;
-
-            float result = (float)Math.Sqrt(
-                (Math.Abs(sh - dh) / COLOR_WEIGHT_HUE * COLOR_PROPORTION) +
-                (Math.Abs(ss - ds) / COLOR_WEIGHT_SATURATION * COLOR_PROPORTION) +
-                (Math.Abs(sb - db) / COLOR_WEIGHT_BRIGHTNESS * COLOR_PROPORTION) +
-                (Math.Abs(sr - dr) / COLOR_WEIGHT_RED * COLOR_PROPORTION) +
-                (Math.Abs(sg - dg) / COLOR_WEIGHT_GREEN * COLOR_PROPORTION) +
-                (Math.Abs(sc - dc) / COLOR_WEIGHT_BLUE * COLOR_PROPORTION));
-
-            return result;
         }
 
         public static CloseColorFinder GetDefault()
