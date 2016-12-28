@@ -3,6 +3,12 @@ Color control and System.Console base operations wrapper.
 
 *![PayPal](https://github.com/ObscureWare/Console.Commands/blob/master/doc/pp64.png) If you find this library useful please consider [donating](https://www.paypal.me/SebastianGruchacz) to support my work.*
 
+*![Nuget](https://github.com/ObscureWare/Console.Commands/blob/master/doc/nugetlogo.png) You can find Nuget [here](https://www.nuget.org/packages/ObscureWare.Console.Core/)*
+
+Or install from Nuget commandline:
+
+>Install-Package ObscureWare.Console.Core
+
 ### There are two main purposes of this library:
 
 * Provide more control over console output that .Net implemntation does
