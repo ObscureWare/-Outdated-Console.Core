@@ -14,7 +14,8 @@ Two examples of color matching results can be found here:
 
 Code that generates these files is here: [GitHub](https://github.com/ObscureWare/Console.Core/blob/master/src/ObscureWare.Console.Tests/ColoringVisualTests.cs)
 
-#Printing function# 
+### Demo
+**Printing function** 
 Just naively renders HTML
 ```csharp
 private static void PrintAllNamedColorsToHtml(CloseColorFinder helper, string fName)
@@ -58,7 +59,7 @@ private static void PrintAllNamedColorsToHtml(CloseColorFinder helper, string fN
     }
 }
 ```
-#Generating default setup#
+**Generating default setup**
 ```csharp
 public void PrintDefaultColorsTest()
 {
@@ -69,10 +70,10 @@ public void PrintDefaultColorsTest()
     }
 }
 ```
-#... and results#
+**... and results**
 ![Default partial demo](https://github.com/ObscureWare/Console.Core/blob/master/demo/Sample_default_1.png)
 
-#Generating my custom alternative#
+**Generating my custom alternative**
 ```csharp
 public void PrintCustomizedColorsBySeba()
 {
@@ -87,5 +88,5 @@ public void PrintCustomizedColorsBySeba()
     }
 }
 ```
-#... and results#
+**... and results**
 ![Seba's partial demo](https://github.com/ObscureWare/Console.Core/blob/master/demo/Sample_seba_1.png)
