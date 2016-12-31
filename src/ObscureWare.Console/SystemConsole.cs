@@ -81,7 +81,7 @@ namespace ObscureWare.Console
                 Console.BufferWidth = 120;
                 Console.BufferHeight = 500;
                 Console.WindowWidth = 120;
-                Console.WindowHeight = 60;
+                Console.WindowHeight = 40;
             }
 
             this.WindowWidth = Console.WindowWidth;
