@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Obscureware Solutions")]
 [assembly: AssemblyProduct("ObscureWare.Console.Core")]
-[assembly: AssemblyCopyright("Copyright © Sebastian Gruchacz 2015-2016")]
+[assembly: AssemblyCopyright("Copyright © Sebastian Gruchacz 2015-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
