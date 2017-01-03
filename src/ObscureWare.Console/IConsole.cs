@@ -2,7 +2,7 @@
 // <copyright file="IConsole.cs" company="Obscureware Solutions">
 // MIT License
 //
-// Copyright(c) 2015-2016 Sebastian Gruchacz
+// Copyright(c) 2015-2017 Sebastian Gruchacz
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -90,6 +90,12 @@ namespace ObscureWare.Console
         /// <param name="x"></param>
         /// <param name="y"></param>
         void SetCursorPosition(int x, int y);
+
+        /// <summary>
+        /// Returns current cursor position in console.
+        /// </summary>
+        /// <returns>Current cursor position in console</returns>
+        Point GetCursorPosition();
 
         /// <summary>
         /// Writes single character at current cursor position using most recent colors
