@@ -28,6 +28,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace ObscureWare.Console
 {
+    using System;
     using System.Drawing;
 
     /// <summary>
@@ -116,6 +117,12 @@ namespace ObscureWare.Console
         /// </summary>
         /// <returns></returns>
         string ReadLine();
+
+        /// <summary>
+        /// Reads one key or function key pressed in console without actually printing it on the screen.
+        /// </summary>
+        /// <returns></returns>
+        ConsoleKeyInfo ReadKey();
 
         void WriteLine();
 

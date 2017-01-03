@@ -169,6 +169,11 @@ namespace ObscureWare.Console
             return Console.ReadLine();
         }
 
+        public ConsoleKeyInfo ReadKey()
+        {
+            return Console.ReadKey(intercept: true);
+        }
+
         public void WriteLine()
         {
             Console.WriteLine();
