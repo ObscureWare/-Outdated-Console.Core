@@ -2,7 +2,7 @@
 // <copyright file="SystemConsole.cs" company="Obscureware Solutions">
 // MIT License
 //
-// Copyright(c) 2015-2016 Sebastian Gruchacz
+// Copyright(c) 2015-2017 Sebastian Gruchacz
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -197,6 +197,18 @@ namespace ObscureWare.Console
             IntPtr hwnd = NativeMethods.GetConsoleWindow();
             NativeMethods.SetWindowPos(hwnd, IntPtr.Zero, x, y, width, height, NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
             // no release handle?
+        }
+
+        /// <inheritdoc />
+        public void HideCursor()
+        {
+            System.Console.CursorVisible = false;
+        }
+
+        /// <inheritdoc />
+        public void ShowCursor()
+        {
+            System.Console.CursorVisible = true;
         }
     }
 }
