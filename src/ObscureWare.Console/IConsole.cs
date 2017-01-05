@@ -133,5 +133,10 @@ namespace ObscureWare.Console
         void WriteLine();
 
         void SetColors(ConsoleFontColor style);
+
+        /// <summary>
+        /// Exposes shared atomic handle to synchronize atomic operations with LOCK.
+        /// </summary>
+        object AtomicHandle { get; }
     }
 }

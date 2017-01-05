@@ -40,6 +40,8 @@ namespace ObscureWare.Console
     {
         private readonly ConsoleController _controller;
 
+        private readonly object _atomicHandle = new object();
+
         /// <summary>
         /// In characters...
         /// </summary>
@@ -182,6 +184,14 @@ namespace ObscureWare.Console
         public void SetColors(ConsoleFontColor style)
         {
             this.SetColors(style.ForeColor, style.BgColor);
+        }
+
+        public object AtomicHandle
+        {
+            get
+            {
+                return this._atomicHandle;
+            }
         }
 
         public void ReplaceConsoleColor(ConsoleColor color, Color rgbColor)
