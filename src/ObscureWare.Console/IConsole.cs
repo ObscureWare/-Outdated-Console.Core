@@ -130,6 +130,16 @@ namespace ObscureWare.Console
         /// <returns></returns>
         ConsoleKeyInfo ReadKey();
 
+        /// <summary>
+        /// Hides cursor
+        /// </summary>
+        void HideCursor();
+
+        /// <summary>
+        /// Shows cursor
+        /// </summary>
+        void ShowCursor();
+
         void WriteLine();
 
         void SetColors(ConsoleFontColor style);
