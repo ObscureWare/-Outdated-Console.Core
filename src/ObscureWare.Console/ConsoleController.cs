@@ -48,6 +48,7 @@ namespace ObscureWare.Console
         public ConsoleController()
         {
             // TODO: second instance created is crashing. Find out why and how to fix it / prevent. In the worst case - hidden control instance singleton
+            // Not very important, can wait
             this._hConsoleOutput = NativeMethods.GetStdHandle(NativeMethods.STD_OUTPUT_HANDLE); // 7
             if (this._hConsoleOutput == NativeMethods.INVALID_HANDLE)
             {

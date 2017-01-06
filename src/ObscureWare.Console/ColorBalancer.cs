@@ -2,7 +2,7 @@
 // <copyright file="ColorBalancer.cs" company="Obscureware Solutions">
 // MIT License
 //
-// Copyright(c) 2015-2016 Sebastian Gruchacz
+// Copyright(c) 2015-2017 Sebastian Gruchacz
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,7 @@ namespace ObscureWare.Console
     /// <summary>
     /// Defines 
     /// </summary>
+    /// <remarks>Influenced by http://stackoverflow.com/questions/1720528/what-is-the-best-algorithm-for-finding-the-closest-color-in-an-array-to-another </remarks>
     public class ColorBalancer
     {
         private readonly float _colorWeightHue;
@@ -53,27 +54,13 @@ namespace ObscureWare.Console
         /// <summary>
         /// Initializes a new instance of the <see cref="ColorBalancer"/> class.
         /// </summary>
-        /// <param name="colorWeightHue">
-        /// Weight of Hue influence
-        /// </param>
-        /// <param name="colorWeightSaturation">
-        /// Weight of Saturation influence
-        /// </param>
-        /// <param name="colorWeightBrightness">
-        /// Weight of Brightness influence
-        /// </param>
-        /// <param name="colorWeightRed">
-        /// Weight of red color influence
-        /// </param>
-        /// <param name="colorWeightGreen">
-        /// Weight of Green color influence
-        /// </param>
-        /// <param name="colorWeightBlue">
-        /// Weight of Blue color influence
-        /// </param>
-        /// <param name="colorProportion">
-        /// Global weight of RGB colors influence
-        /// </param>
+        /// <param name="colorWeightHue">Inversed Weight of Hue influence</param>
+        /// <param name="colorWeightSaturation">Weight of Saturation influence</param>
+        /// <param name="colorWeightBrightness">Weight of Brightness influence</param>
+        /// <param name="colorWeightRed">Inversed Weight of red color influence</param>
+        /// <param name="colorWeightGreen">Inversed Weight of Green color influence</param>
+        /// <param name="colorWeightBlue">Inversed Weight of Blue color influence</param>
+        /// <param name="colorProportion">Global Inversed Weight of RGB colors influence</param>
         private ColorBalancer(
             float colorWeightHue,
             float colorWeightSaturation,
@@ -120,16 +107,16 @@ namespace ObscureWare.Console
                 (Math.Abs(sh - dh) / this._colorWeightHue) +
                 (Math.Abs(ss - ds) / this._colorWeightSaturation) +
                 (Math.Abs(sb - db) / this._colorWeightBrightness) +
-                (Math.Abs(sr - dr) / this._colorWeightRed * this._colorProportion) +
-                (Math.Abs(sg - dg) / this._colorWeightGreen * this._colorProportion) +
-                (Math.Abs(sc - dc) / this._colorWeightBlue * this._colorProportion));
+                (Math.Abs(sr - dr) / (this._colorWeightRed * this._colorProportion)) +
+                (Math.Abs(sg - dg) / (this._colorWeightGreen * this._colorProportion)) +
+                (Math.Abs(sc - dc) / (this._colorWeightBlue * this._colorProportion)));
 
             return result;
         }
 
         #region Default settings
 
-        private const float COLOR_WEIGHT_HUE = 46.3f;
+        private const float COLOR_WEIGHT_HUE = 16.3f;
 
         private const float COLOR_WEIGHT_SATURATION = 25.3f;
 
@@ -137,11 +124,11 @@ namespace ObscureWare.Console
 
         private const float COLOR_WEIGHT_RED = 28.5f;
 
-        private const float COLOR_WEIGHT_GREEN = 35.5f;
+        private const float COLOR_WEIGHT_GREEN = 18.5f;
 
         private const float COLOR_WEIGHT_BLUE = 28.75f;
 
-        private const float COLOR_PROPORTION = 0.1f; // 100f / 255f;
+        private const float COLOR_PROPORTION = 0.2f; // 100f / 255f;
 
         /// <summary>
         /// Gets the default color balancer rules

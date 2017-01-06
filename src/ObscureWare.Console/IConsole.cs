@@ -104,10 +104,6 @@ namespace ObscureWare.Console
         /// <param name="character"></param>
         void WriteText(char character);
 
-        // TODO: read operations
-
-        // TODO: asynchronous read-write operations? Probably not, but asynchronous writes -  for sure... Maybe move to operations?
-
         /// <summary>
         /// Gets vertical size of console Window
         /// </summary>
@@ -140,8 +136,15 @@ namespace ObscureWare.Console
         /// </summary>
         void ShowCursor();
 
+        /// <summary>
+        /// Writes line of text using most recently use colors
+        /// </summary>
         void WriteLine();
 
+        /// <summary>
+        /// Sets colors to be used by following print / write instructions
+        /// </summary>
+        /// <param name="style"></param>
         void SetColors(ConsoleFontColor style);
 
         /// <summary>

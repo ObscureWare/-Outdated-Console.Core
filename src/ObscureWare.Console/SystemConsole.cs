@@ -47,7 +47,11 @@ namespace ObscureWare.Console
         /// </summary>
         public Point WindowSize { get; }
 
-        public SystemConsole(ConsoleController controller, bool isFullScreen)
+        /// <summary>
+        /// The most safe constructor - uses default window and buffer sizes
+        /// </summary>
+        /// <param name="controller"></param>
+        public SystemConsole(ConsoleController controller)
         {
             if (controller == null)
             {
@@ -59,6 +63,17 @@ namespace ObscureWare.Console
             Console.OutputEncoding = Encoding.Unicode;
             Console.InputEncoding = Encoding.Unicode;
 
+            this.WindowWidth = Console.WindowWidth;
+            this.WindowHeight = Console.WindowHeight;
+        }
+
+        /// <summary>
+        /// Full-screen constructor, when flag value is TRUE. If no - it's just constructs 120x40 window with 120x500 buffer (larger than default).
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="isFullScreen"></param>
+        public SystemConsole(ConsoleController controller, bool isFullScreen) : this(controller)
+        {
             if (isFullScreen)
             {
                 this.SetConsoleWindowToFullScreen();
@@ -79,12 +94,33 @@ namespace ObscureWare.Console
             else
             {
                 // set console (buffer) little bigger by default
-                // TODO: use more constructors / methods to control window / buffer / size / position. Perhaps expose dedicated control interface?
                 Console.BufferWidth = 120;
                 Console.BufferHeight = 500;
                 Console.WindowWidth = 120;
                 Console.WindowHeight = 40;
             }
+
+            this.WindowWidth = Console.WindowWidth;
+            this.WindowHeight = Console.WindowHeight;
+        }
+
+        /// <summary>
+        /// Custom sized console
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="bufferSize">Width and height of the buffer. Must be >= window size. Will be resized automatically if not fits...</param>
+        /// <param name="windowSize">Width and height of the window (In columns and rows, depends of font and screen resolution!). Cannot exceed screen size. Will be automatically trimmed.</param>
+        public SystemConsole(ConsoleController controller, Point bufferSize, Point windowSize) : this(controller)
+        {
+            windowSize.X = Math.Min(windowSize.X, Console.LargestWindowWidth - 2);
+            windowSize.Y = Math.Min(windowSize.Y, Console.LargestWindowHeight - 1);
+            bufferSize.X = Math.Max(bufferSize.X, windowSize.X);
+            bufferSize.Y = Math.Max(bufferSize.Y, windowSize.Y);
+
+            Console.BufferWidth = bufferSize.X;
+            Console.WindowWidth = windowSize.X;
+            Console.BufferHeight = bufferSize.Y;
+            Console.WindowHeight = windowSize.Y;
 
             this.WindowWidth = Console.WindowWidth;
             this.WindowHeight = Console.WindowHeight;
@@ -100,8 +136,7 @@ namespace ObscureWare.Console
                 Screen.PrimaryScreen.WorkingArea.Height - (2 * 16) - SystemInformation.CaptionHeight);
         }
 
-        // TODO: introduce atomic operations for asynchronous writes...
-
+        /// <inheritdoc />
         public void WriteText(int x, int y, string text, Color foreColor, Color bgColor)
         {
             this.SetCursorPosition(x, y);
@@ -109,83 +144,100 @@ namespace ObscureWare.Console
             this.WriteText(text);
         }
 
+        /// <inheritdoc />
         private void WriteText(string text)
         {
             Console.Write(text);
         }
 
+        /// <inheritdoc />
         void IConsole.WriteText(string text)
         {
             this.WriteText(text);
         }
 
+        /// <inheritdoc />
         public void WriteLine(ConsoleFontColor colors, string text)
         {
             this.SetColors(colors.ForeColor, colors.BgColor);
             Console.WriteLine(text);
         }
 
+        /// <inheritdoc />
         public void WriteLine(string text)
         {
             Console.WriteLine(text);
         }
 
+        /// <inheritdoc />
         public void SetColors(Color foreColor, Color bgColor)
         {
             Console.ForegroundColor = this._controller.CloseColorFinder.FindClosestColor(foreColor);
             Console.BackgroundColor = this._controller.CloseColorFinder.FindClosestColor(bgColor);
         }
 
+        /// <inheritdoc />
         public void Clear()
         {
             Console.Clear();
         }
 
+        /// <inheritdoc />
         public void WriteText(ConsoleFontColor colors, string text)
         {
             this.SetColors(colors.ForeColor, colors.BgColor);
             Console.Write(text);
         }
 
+        /// <inheritdoc />
         public void SetCursorPosition(int x, int y)
         {
             Console.SetCursorPosition(x, y);
         }
 
+        /// <inheritdoc />
         public Point GetCursorPosition()
         {
             return new Point(Console.CursorLeft, Console.CursorTop);
         }
 
+        /// <inheritdoc />
         public void WriteText(char character)
         {
             Console.Write(character);
         }
 
+        /// <inheritdoc />
         public int WindowHeight { get; }
 
+        /// <inheritdoc />
         public int WindowWidth { get; }
 
+        /// <inheritdoc />
         public string ReadLine()
         {
             return Console.ReadLine();
         }
 
+        /// <inheritdoc />
         public ConsoleKeyInfo ReadKey()
         {
             return Console.ReadKey(intercept: true);
         }
 
+        /// <inheritdoc />
         public void WriteLine()
         {
             Console.WriteLine();
         }
 
+        /// <inheritdoc />
         public void SetColors(ConsoleFontColor style)
         {
             this.SetColors(style.ForeColor, style.BgColor);
         }
 
+        /// <inheritdoc />
         public object AtomicHandle
         {
             get
@@ -194,6 +246,7 @@ namespace ObscureWare.Console
             }
         }
 
+        /// <inheritdoc />
         public void ReplaceConsoleColor(ConsoleColor color, Color rgbColor)
         {
             this._controller.ReplaceConsoleColor(color, rgbColor);

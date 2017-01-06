@@ -22,6 +22,8 @@ Code that generates these files is here: [GitHub](https://github.com/ObscureWare
 
 ### Demo
 
+*Images below come form version 0.3.1, where I'd seriously changed color balancer weights. I just realized that part of the formula actually work the other way...*
+
 **Printing function** 
 Just naively renders HTML
 

@@ -11,8 +11,8 @@
     {
         private const string TEST_ROOT = @"C:\\TestResults\\ConsoleColors\\";
 
-        // This is actually not possible to programmatically verify how "close" were colors matched - it's all manual testing...
-        // Therefore - help page will be rendered
+        // This is obviously not possible to programmatically verify how "close" were colors matched - it's all manual testing required...
+        // Therefore - help pages will be rendered for default and some customized results
 
         [Fact]
         public void PrintDefaultColorsTest()
@@ -78,8 +78,6 @@
 
             using (var tw = new StreamWriter(path))
             {
-                // TODO: print table with console colors
-
                 tw.WriteLine("<html><body><table>");
                 tw.WriteLine("<tr><th>ColorName</th><th>Sys Color</th><th>Console Color</th></tr>");
 

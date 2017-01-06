@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>This small library allows more control on System.Console than using default one. Plus CloseColorFinder tool for mapping System.Drawing.Color structure to the closest possible color from console's 16 colors. And you can also easily edit those defaults.</description>
     <releaseNotes>Version BETA.
-    This is actually a milestone - atomic operations are now possible (with hxor solution but still...).</releaseNotes>
+    Cleaning project. Rearranged color balancer default parameters and fixed balancing phrase. New demo images.</releaseNotes>
     <copyright>Copyright © Sebastian Gruchacz 2016</copyright>
     <tags>Console,Colors,Management</tags>
   </metadata>

@@ -2,7 +2,7 @@
 // <copyright file="CloseColorFinder.cs" company="Obscureware Solutions">
 // MIT License
 //
-// Copyright(c) 2015-2016 Sebastian Gruchacz
+// Copyright(c) 2015-2017 Sebastian Gruchacz
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -45,6 +45,8 @@ namespace ObscureWare.Console
 
         private readonly ColorBalancer _colorBalancer;
 
+        private bool _disposed = false;
+
         public CloseColorFinder(KeyValuePair<ConsoleColor, Color>[] colorBuffer, ColorBalancer colorBalancer = null)
         {
             this._colorBuffer = colorBuffer;
@@ -55,10 +57,14 @@ namespace ObscureWare.Console
         /// Tries to find the closest match for given RGB color among current set of colors used by System.Console
         /// </summary>
         /// <param name="color"></param>
-        /// <returns></returns>
-        /// <remarks>Influenced by http://stackoverflow.com/questions/1720528/what-is-the-best-algorithm-for-finding-the-closest-color-in-an-array-to-another</remarks>
+        /// <returns></returns> 
         public ConsoleColor FindClosestColor(Color color)
         {
+            if (this._disposed)
+            {
+                throw new ObjectDisposedException(nameof(CloseColorFinder));
+            }
+
             ConsoleColor cc;
             if (this._knownMappings.TryGetValue(color, out cc))
             {
@@ -77,6 +83,11 @@ namespace ObscureWare.Console
         /// <returns>ARGB color.</returns>
         public Color GetCurrentConsoleColor(ConsoleColor cc)
         {
+            if (this._disposed)
+            {
+                throw new ObjectDisposedException(nameof(CloseColorFinder));
+            }
+
             return this._colorBuffer.Single(pair => pair.Key == cc).Value;
         }
 
@@ -123,7 +134,7 @@ namespace ObscureWare.Console
         /// <inheritdoc />
         public void Dispose()
         {
-            // TODO: just do invalidation when disposed...
+            this._disposed = true;
         }
     }
 }
