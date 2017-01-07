@@ -22,7 +22,7 @@ Code that generates these files is here: [GitHub](https://github.com/ObscureWare
 
 ### Demo
 
-*Images below come form version 0.3.1, where I'd seriously changed color balancer weights. I just realized that part of the formula actually work the other way...*
+*Images below come form version 0.3.1, where I'd seriously changed color balancer weights. I just realized that part of the formula actually work the other way... So if you're still using older one - I'd strongly suggest update, especially that in this version I'd also exposed more constructors to SystemConsole class.*
 
 **Printing function** 
 Just naively renders HTML
@@ -45,8 +45,6 @@ private static void PrintAllNamedColorsToHtml(CloseColorFinder helper, string fN
 
     using (var tw = new StreamWriter(path))
     {
-        // TODO: print table with console colors
-
         tw.WriteLine("<html><body><table>");
         tw.WriteLine("<tr><th>ColorName</th><th>Sys Color</th><th>Console Color</th></tr>");
 
@@ -83,6 +81,10 @@ public void PrintDefaultColorsTest()
 }
 ```
 
+The biggest problem with this set is lack of "orange" colors, so all such colors like Brown, Coral, Salmon will be matched with complete strange colors.
+
+![Default color set](https://github.com/ObscureWare/Console.Core/blob/master/demo/default_color_set.png)
+
 **... and results(partial)**
 
 ![Default partial demo](https://github.com/ObscureWare/Console.Core/blob/master/demo/Sample_default_1.png)
@@ -103,6 +105,10 @@ public void PrintCustomizedColorsBySeba()
     }
 }
 ```
+
+Now, with slightly alternated color set the results are IMHO much better.
+
+![Default color set](https://github.com/ObscureWare/Console.Core/blob/master/demo/seba_color_set.png)
 
 **... and results (also partial)**
 
