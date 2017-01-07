@@ -22,7 +22,7 @@ Code that generates these files is here: [GitHub](https://github.com/ObscureWare
 
 ### Demo
 
-*Images below come form version 0.3.1, where I'd seriously changed color balancer weights. I just realized that part of the formula actually work the other way... So if you're still using older one - I'd strongly suggest update, especially that in this version I'd also exposed more constructors to SystemConsole class.*
+*Images below came from version 0.3.1, where I'd seriously changed color balancer weights. I just realized that part of the formula actually work the other way... So if you're still using older one - I'd strongly suggest update, especially that in this version I'd also exposed more constructors to SystemConsole class.*
 
 **Printing function** 
 Just naively renders HTML
