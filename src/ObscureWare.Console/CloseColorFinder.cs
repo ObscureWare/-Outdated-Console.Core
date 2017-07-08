@@ -33,6 +33,7 @@ namespace ObscureWare.Console
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
+    using CuttingEdge.Conditions;
 
     /// <summary>
     /// Class responsible for finding closest color index from given console colors array.
@@ -49,6 +50,18 @@ namespace ObscureWare.Console
 
         public CloseColorFinder(KeyValuePair<ConsoleColor, Color>[] colorBuffer, ColorBalancer colorBalancer = null)
         {
+            int expLength = Enum.GetNames(typeof(ConsoleColor)).Length;
+
+            Condition.Requires(colorBuffer, nameof(colorBuffer))
+                .IsNotNull()
+                .IsNotEmpty()
+                .HasLength(expLength);
+
+            if (colorBuffer.Select(pair => pair.Key).Distinct().Count() != expLength) // TODO: optionally add extension to Conditions...
+            {
+                throw new ArgumentException($"Must contain definition for each {nameof(ConsoleColor)} value.", nameof(colorBuffer));
+            };
+
             this._colorBuffer = colorBuffer;
             this._colorBalancer = colorBalancer ?? ColorBalancer.Default;
         }
@@ -98,6 +111,10 @@ namespace ObscureWare.Console
 
         public static CloseColorFinder CustomizedDefault(params Tuple<ConsoleColor, Color>[] overwrites)
         {
+            Condition.Requires(overwrites, nameof(overwrites))
+                .IsNotNull()
+                .IsNotEmpty();
+
             var dict = GetDefaultDefinitions().ToDictionary(p => p.Key, p => p.Value);
             foreach (var overwrite in overwrites)
             {

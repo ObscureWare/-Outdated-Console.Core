@@ -11,7 +11,7 @@ Or install from Nuget commandline:
 
 ### There are two main purposes of this library:
 
-* Provide more control over console output that .Net implemntation does
+* Provide more control over console output that .Net implementation does
 * Give the developer ability to freely use regular RGB colors inside application and then let the code try to match one of the currently defined colors.
 
 Two examples of color matching results can be found here:

@@ -31,7 +31,7 @@ namespace ObscureWare.Console
     using System.Drawing;
 
     /// <summary>
-    /// Handy structure to remember settings of special-case color pairs
+    /// Handy, immutable structure to remember settings of special-case color pairs
     /// </summary>
     public struct ConsoleFontColor
     {

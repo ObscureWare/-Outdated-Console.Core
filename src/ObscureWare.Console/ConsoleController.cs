@@ -32,6 +32,7 @@ namespace ObscureWare.Console
     using System.Collections.Generic;
     using System.Drawing;
     using System.Runtime.InteropServices;
+    using CuttingEdge.Conditions;
 
     /// <summary>
     /// Class used to control basic system's console behavior
@@ -58,53 +59,10 @@ namespace ObscureWare.Console
             this._closeColorFinder = new CloseColorFinder(this.GetCurrentColorset());
         }
 
-        #region IDsiposable implementation
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
         /// <summary>
-        /// Finalizes an instance of the <see cref="ConsoleController"/> class. 
+        /// Exposes instance of inner <seealso cref="CloseColorFinder"/>
         /// </summary>
-        ~ConsoleController()
-        {
-            // NOTE: Leave out the finalizer altogether if this class doesn't 
-            // own unmanaged resources itself, but leave the other methods
-            // exactly as they are. 
-            this.Dispose(false);
-        }
-
-        /// <summary>
-        /// Actual disposing method
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                // free managed resources
-            }
-
-            // free native resources
-            if (this._hConsoleOutput != NativeMethods.INVALID_HANDLE)
-            {
-                NativeMethods.CloseHandle(this._hConsoleOutput);
-            }
-        }
-
-        #endregion IDsiposable implementation
-
-        public CloseColorFinder CloseColorFinder
-        {
-            get
-            {
-                return this._closeColorFinder;
-            }
-        }
+        public CloseColorFinder CloseColorFinder => this._closeColorFinder;
 
         /// <summary>
         /// Replaces default (or previous...) values of console colors with new RGB values.
@@ -112,6 +70,10 @@ namespace ObscureWare.Console
         /// <param name="mappings"></param>
         public void ReplaceConsoleColors(params Tuple<ConsoleColor, Color>[] mappings)
         {
+            Condition.Requires(mappings, nameof(mappings))
+                .IsNotNull()
+                .IsNotEmpty();
+
             var csbe = this.GetConsoleScreenBufferInfoEx();
 
             foreach (var mapping in mappings)
@@ -119,17 +81,7 @@ namespace ObscureWare.Console
                 SetNewColorDefinition(ref csbe, mapping.Item1, mapping.Item2);
             }
 
-            // strange, needs to be done because window is shrunken somehow
-            ++csbe.srWindow.Bottom;
-            ++csbe.srWindow.Right;
-
-            bool brc = NativeMethods.SetConsoleScreenBufferInfoEx(this._hConsoleOutput, ref csbe);
-            if (!brc)
-            {
-                throw new SystemException("SetConsoleScreenBufferInfoEx->WinError: #" + Marshal.GetLastWin32Error());
-            }
-
-            this._closeColorFinder = new CloseColorFinder(this.GetCurrentColorset());
+            this.ApplyColorChanges(csbe);
         }
 
         /// <summary>
@@ -137,23 +89,43 @@ namespace ObscureWare.Console
         /// </summary>
         /// <param name="color">Console named color</param>
         /// <param name="rgbColor">New RGB value to be used under this color name</param>
+        /// <remarks>For mutliple colors change rather use <see cref="ReplaceConsoleColors"/> instead!</remarks>
         public void ReplaceConsoleColor(ConsoleColor color, Color rgbColor)
         {
             var csbe = this.GetConsoleScreenBufferInfoEx();
 
             SetNewColorDefinition(ref csbe, color, rgbColor);
 
-            // strange, needs to be done because window is shrunken somehow
-            ++csbe.srWindow.Bottom;
-            ++csbe.srWindow.Right;
+            this.ApplyColorChanges(csbe);
+        }
 
-            bool brc = NativeMethods.SetConsoleScreenBufferInfoEx(this._hConsoleOutput, ref csbe);
-            if (!brc)
+        /// <summary>
+        /// Returns current set of colors - what exact RGB is actually used for each Console Color
+        /// </summary>
+        /// <returns></returns>
+        public KeyValuePair<ConsoleColor, Color>[] GetCurrentColorset()
+        {
+            var csbe = this.GetConsoleScreenBufferInfoEx();
+
+            return new[]
             {
-                throw new SystemException("SetConsoleScreenBufferInfoEx->WinError: #" + Marshal.GetLastWin32Error());
-            }
-
-            this._closeColorFinder = new CloseColorFinder(this.GetCurrentColorset());
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Black, csbe.black.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkBlue, csbe.darkBlue.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkGreen, csbe.darkGreen.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkCyan, csbe.darkCyan.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkRed, csbe.darkRed.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkMagenta, csbe.darkMagenta.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkYellow, csbe.darkYellow.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Gray, csbe.gray.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkGray, csbe.darkGray.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Blue, csbe.blue.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Green, csbe.green.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Cyan, csbe.cyan.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Red, csbe.red.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Magenta, csbe.magenta.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Yellow, csbe.yellow.GetColor()),
+                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.White, csbe.white.GetColor()),
+            };
         }
 
         private NativeMethods.CONSOLE_SCREEN_BUFFER_INFO_EX GetConsoleScreenBufferInfoEx()
@@ -167,6 +139,21 @@ namespace ObscureWare.Console
                 throw new SystemException("GetConsoleScreenBufferInfoEx->WinError: #" + Marshal.GetLastWin32Error());
             }
             return csbe;
+        }
+
+        private void ApplyColorChanges(NativeMethods.CONSOLE_SCREEN_BUFFER_INFO_EX csbe)
+        {
+            // strange, needs to be done because window is shrunken somehow
+            ++csbe.srWindow.Bottom;
+            ++csbe.srWindow.Right;
+
+            bool brc = NativeMethods.SetConsoleScreenBufferInfoEx(this._hConsoleOutput, ref csbe);
+            if (!brc)
+            {
+                throw new SystemException("SetConsoleScreenBufferInfoEx->WinError: #" + Marshal.GetLastWin32Error());
+            }
+
+            this._closeColorFinder = new CloseColorFinder(this.GetCurrentColorset());
         }
 
         private static void SetNewColorDefinition(ref NativeMethods.CONSOLE_SCREEN_BUFFER_INFO_EX csbe, ConsoleColor color, Color rgbColor)
@@ -230,29 +217,44 @@ namespace ObscureWare.Console
             }
         }
 
-        public KeyValuePair<ConsoleColor, Color>[] GetCurrentColorset()
-        {
-            var csbe = this.GetConsoleScreenBufferInfoEx();
+        #region IDsiposable implementation
 
-            return new[]
-            {
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Black, csbe.black.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkBlue, csbe.darkBlue.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkGreen, csbe.darkGreen.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkCyan, csbe.darkCyan.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkRed, csbe.darkRed.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkMagenta, csbe.darkMagenta.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkYellow, csbe.darkYellow.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Gray, csbe.gray.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkGray, csbe.darkGray.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Blue, csbe.blue.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Green, csbe.green.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Cyan, csbe.cyan.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Red, csbe.red.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Magenta, csbe.magenta.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Yellow, csbe.yellow.GetColor()),
-                new KeyValuePair<ConsoleColor, Color>(ConsoleColor.White, csbe.white.GetColor()),
-            };
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        /// <summary>
+        /// Finalizes an instance of the <see cref="ConsoleController"/> class. 
+        /// </summary>
+        ~ConsoleController()
+        {
+            // NOTE: Leave out the finalizer altogether if this class doesn't 
+            // own unmanaged resources itself, but leave the other methods
+            // exactly as they are. 
+            this.Dispose(false);
+        }
+
+        /// <summary>
+        /// Actual disposing method
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // free managed resources
+            }
+
+            // free native resources
+            if (this._hConsoleOutput != NativeMethods.INVALID_HANDLE)
+            {
+                NativeMethods.CloseHandle(this._hConsoleOutput);
+            }
+        }
+
+        #endregion IDsiposable implementation
     }
 }

@@ -32,6 +32,7 @@ namespace ObscureWare.Console
     using System.Drawing;
     using System.Text;
     using System.Windows.Forms;
+    using CuttingEdge.Conditions;
 
     /// <summary>
     /// Wraps System.Console with IConsole interface methods
@@ -53,10 +54,7 @@ namespace ObscureWare.Console
         /// <param name="controller"></param>
         public SystemConsole(ConsoleController controller)
         {
-            if (controller == null)
-            {
-                throw new ArgumentNullException(nameof(controller));
-            }
+            Condition.Requires(controller, nameof(controller)).IsNotNull();
 
             this._controller = controller;
 
@@ -238,13 +236,7 @@ namespace ObscureWare.Console
         }
 
         /// <inheritdoc />
-        public object AtomicHandle
-        {
-            get
-            {
-                return this._atomicHandle;
-            }
-        }
+        public object AtomicHandle => this._atomicHandle;
 
         /// <inheritdoc />
         public void ReplaceConsoleColor(ConsoleColor color, Color rgbColor)
