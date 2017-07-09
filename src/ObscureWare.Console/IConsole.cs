@@ -114,6 +114,8 @@ namespace ObscureWare.Console
         /// </summary>
         int WindowWidth { get; }
 
+        ConsoleMode ConsoleMode { get; }
+
         /// <summary>
         /// Reads one text line synchronously.
         /// </summary>

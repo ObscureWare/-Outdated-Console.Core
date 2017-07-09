@@ -212,6 +212,9 @@ namespace ObscureWare.Console
         public int WindowWidth { get; }
 
         /// <inheritdoc />
+        public ConsoleMode ConsoleMode => ConsoleMode.Buffered;
+
+        /// <inheritdoc />
         public string ReadLine()
         {
             return Console.ReadLine();

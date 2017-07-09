@@ -55,6 +55,7 @@
     <Compile Include="ColorBalancer.cs" />
     <Compile Include="ConsoleController.cs" />
     <Compile Include="ConsoleFontColor.cs" />
+    <Compile Include="ConsoleMode.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IConsole.cs" />
     <Compile Include="NativeMethods.cs" />
