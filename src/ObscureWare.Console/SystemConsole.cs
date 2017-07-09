@@ -32,7 +32,7 @@ namespace ObscureWare.Console
     using System.Drawing;
     using System.Text;
     using System.Windows.Forms;
-    using CuttingEdge.Conditions;
+    using Conditions;
 
     /// <summary>
     /// Wraps System.Console with IConsole interface methods

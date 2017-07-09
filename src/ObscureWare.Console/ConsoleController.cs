@@ -32,7 +32,7 @@ namespace ObscureWare.Console
     using System.Collections.Generic;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using CuttingEdge.Conditions;
+    using Conditions;
 
     /// <summary>
     /// Class used to control basic system's console behavior

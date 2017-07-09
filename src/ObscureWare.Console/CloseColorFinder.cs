@@ -33,7 +33,7 @@ namespace ObscureWare.Console
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
-    using CuttingEdge.Conditions;
+    using Conditions;
 
     /// <summary>
     /// Class responsible for finding closest color index from given console colors array.
