@@ -109,6 +109,12 @@ namespace ObscureWare.Console
             return new CloseColorFinder(GetDefaultDefinitions().ToArray());
         }
 
+        private static IEnumerable<KeyValuePair<ConsoleColor, Color>> GetDefaultDefinitions()
+        {
+            // TODO: Provide switch to turn old colors set (now being alternate...)
+            return PredefinedColorSets.Windows10Definitions();
+        }
+
         public static CloseColorFinder CustomizedDefault(params Tuple<ConsoleColor, Color>[] overwrites)
         {
             Condition.Requires(overwrites, nameof(overwrites))
@@ -122,30 +128,6 @@ namespace ObscureWare.Console
             }
 
             return new CloseColorFinder(dict.ToArray());
-        }
-
-        /// <summary>
-        /// Returns default color-set
-        /// </summary>
-        /// <returns></returns>
-        private static IEnumerable<KeyValuePair<ConsoleColor, Color>> GetDefaultDefinitions()
-        {
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Black, Color.FromArgb(0, 0, 0));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkBlue, Color.FromArgb(0, 0, 128));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkGreen, Color.FromArgb(0, 128, 0));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkCyan, Color.FromArgb(0, 128, 128));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkRed, Color.FromArgb(128, 0, 0));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkMagenta, Color.FromArgb(128, 0, 128));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkYellow, Color.FromArgb(128, 128, 0));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Gray, Color.FromArgb(192, 192, 192));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.DarkGray, Color.FromArgb(128, 128, 128));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Blue, Color.FromArgb(0, 0, 255));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Green, Color.FromArgb(0, 255, 0));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Cyan, Color.FromArgb(0, 255, 255));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Red, Color.FromArgb(255, 0, 0));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Magenta, Color.FromArgb(255, 0, 255));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.Yellow, Color.FromArgb(255, 255, 0));
-            yield return new KeyValuePair<ConsoleColor, Color>(ConsoleColor.White, Color.FromArgb(255, 255, 255));
         }
 
         /// <inheritdoc />

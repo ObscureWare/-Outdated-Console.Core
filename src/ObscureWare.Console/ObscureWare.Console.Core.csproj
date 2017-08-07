@@ -59,6 +59,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IConsole.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="PredefinedColorSets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemConsole.cs" />
   </ItemGroup>
